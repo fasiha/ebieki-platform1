@@ -24,7 +24,7 @@ const character = kanjidic.kanjidic2[kanji];
 <li>
   {
     card ? (
-      <a href={`/kanji/${card.kanji}`}>
+      <a href={`/vocab/${card.kanji}`}>
         <ruby>
           {kanji}
           <rt>{card.kanas[0]}</rt>
@@ -40,7 +40,7 @@ const character = kanjidic.kanjidic2[kanji];
   {
     relatives?.map((x) => (
       <>
-        <a href={`/kanji/${x.card.kanji}`}>
+        <a href={`/vocab/${x.card.kanji}`}>
           <ruby>
             {x.card.kanji}
             <rt>{x.card.kanas[0]}</rt>

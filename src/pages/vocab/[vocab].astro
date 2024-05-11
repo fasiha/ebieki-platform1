@@ -8,10 +8,10 @@ export async function getStaticPaths() {
   const ebieki: WithDistance[] = JSON.parse(
     readFileSync("data/table.json", "utf8")
   );
-  return ebieki.map((x) => ({ params: { kanji: x.card.kanji } }));
+  return ebieki.map((x) => ({ params: { vocab: x.card.kanji } }));
 }
 
-const { kanji } = Astro.params;
+const { vocab: kanji } = Astro.params;
 const ee: WithDistance[] = JSON.parse(readFileSync("data/table.json", "utf8"));
 const { card, glossStr } = ee.find((x) => x.card.kanji === kanji)!;
 

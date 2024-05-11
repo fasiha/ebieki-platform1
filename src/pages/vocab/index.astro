@@ -40,7 +40,7 @@ const mainKana = ebieki.map((x) => x.card.kanas[0]);
     kanji.map((k, i) => (
       <>
         <div class="card">
-          <a href={`/kanji/${k}`}>
+          <a href={`/vocab/${k}`}>
             <ruby>
               {k}
               <rt>{mainKana[i]}</rt>
