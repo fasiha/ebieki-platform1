@@ -1,0 +1,38 @@
+---
+import { readFileSync } from "node:fs";
+import type { WithDistance } from "../../interfaces/ebi-eki";
+import Descendant from "../../components/Descendant.astro";
+import type { DependencyGraph } from "../../interfaces/kanjiDepGraph";
+
+export async function getStaticPaths() {
+  const ebieki: WithDistance[] = JSON.parse(
+    readFileSync("data/table.json", "utf8")
+  );
+  return ebieki.map((x) => ({ params: { kanji: x.card.kanji } }));
+}
+
+const { kanji } = Astro.params;
+const ee: WithDistance[] = JSON.parse(readFileSync("data/table.json", "utf8"));
+const { card, glossStr } = ee.find((x) => x.card.kanji === kanji)!;
+
+const fullGraph: DependencyGraph = JSON.parse(
+  readFileSync("data/wanikani-kanji-graph.json", "utf8")
+);
+const { kanjiToRadicals } = fullGraph;
+const kanjiBreakdownsAvailable = kanji
+  .split("")
+  .filter((x) => x in kanjiToRadicals);
+---
+
+<meta charset="utf-8" />
+
+<h1>{card.kanji}</h1>
+<h2>{card.kanas.join(" ")}</h2>
+<p>{glossStr}</p>
+<ul>
+  {
+    kanjiBreakdownsAvailable.map((k) => (
+      <Descendant graph={kanjiToRadicals} kanji={k} />
+    ))
+  }
+</ul>

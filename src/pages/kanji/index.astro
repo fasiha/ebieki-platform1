@@ -1,0 +1,53 @@
+---
+import { readFileSync } from "node:fs";
+import type { WithDistance } from "../../interfaces/ebi-eki";
+
+const ebieki: WithDistance[] = JSON.parse(
+  readFileSync("data/table.json", "utf8")
+);
+const kanji = ebieki.map((x) => x.card.kanji);
+const mainKana = ebieki.map((x) => x.card.kanas[0]);
+---
+
+<meta charset="utf-8" />
+<style>
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .card {
+    padding: 0.5rem 0.3rem 0rem 0.3rem;
+    margin: 0.1rem;
+    border: 1px solid orange;
+    white-space: nowrap;
+  }
+
+  .card a {
+    text-decoration: none;
+    color: unset;
+  }
+
+  .card a:hover {
+    text-decoration: underline;
+    color: darkorange;
+  }
+</style>
+
+<div class="cards">
+  {
+    kanji.map((k, i) => (
+      <>
+        <div class="card">
+          <a href={`/kanji/${k}`}>
+            <ruby>
+              {k}
+              <rt>{mainKana[i]}</rt>
+            </ruby>
+          </a>
+        </div>{" "}
+      </>
+    ))
+  }
+</div>

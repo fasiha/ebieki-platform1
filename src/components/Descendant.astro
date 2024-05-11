@@ -1,0 +1,54 @@
+---
+import { readFileSync } from "node:fs";
+import type { WithDistance } from "../interfaces/ebi-eki";
+import type { KanjiDic2 } from "../interfaces/kanjidic";
+
+interface Props {
+  kanji: string;
+  graph: Record<string, string[]>;
+}
+const { kanji, graph } = Astro.props;
+const descendants = (graph[kanji] ?? []).filter((x) => x !== kanji);
+const ee: WithDistance[] = JSON.parse(readFileSync("data/table.json", "utf8"));
+const { card, glossStr } = ee.find((x) => x.card.kanji === kanji) ?? {};
+const relatives = ee.filter(
+  (x) => x.card.kanji !== kanji && x.card.kanji.includes(kanji)
+);
+
+const kanjidic: KanjiDic2 = JSON.parse(
+  readFileSync("data/kanjidic.json", "utf8")
+);
+const character = kanjidic.kanjidic2[kanji];
+---
+
+<li>
+  {
+    card ? (
+      <a href={`/kanji/${card.kanji}`}>
+        <ruby>
+          {kanji}
+          <rt>{card.kanas[0]}</rt>
+        </ruby>
+      </a>
+    ) : (
+      kanji
+    )
+  }{" "}
+  {glossStr}{" "}
+  {character?.readings.join("・")}{" "}
+  {character?.meanings.join(" / ")}{" "}
+  {
+    relatives?.map((x) => (
+      <>
+        <a href={`/kanji/${x.card.kanji}`}>
+          <ruby>
+            {x.card.kanji}
+            <rt>{x.card.kanas[0]}</rt>
+          </ruby>
+        </a>
+        {" ・ "}
+      </>
+    ))
+  }
+  <ul>{descendants.map((d) => <Astro.self graph={graph} kanji={d} />)}</ul>
+</li>
