@@ -7,16 +7,24 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "wrap-db": "kysely-codegen --dialect sqlite --out-file src/db/db.d.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.6.0",
+    "@astrojs/node": "^8.2.5",
     "@astrojs/solid-js": "^4.2.0",
     "astro": "^4.8.2",
+    "better-sqlite3": "^9.6.0",
+    "dotenv": "^16.4.5",
+    "kysely": "^0.27.3",
+    "solid-devtools": "^0.30.1",
     "solid-js": "^1.8.17",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@types/node": "^20.12.11"
+    "@types/better-sqlite3": "^7.6.10",
+    "@types/node": "^20.12.11",
+    "kysely-codegen": "^0.15.0"
   }
 }

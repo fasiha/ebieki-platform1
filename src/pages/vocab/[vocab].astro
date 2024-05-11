@@ -4,6 +4,8 @@ import type { WithDistance } from "../../interfaces/ebi-eki";
 import Descendant from "../../components/Descendant.astro";
 import type { DependencyGraph } from "../../interfaces/kanjiDepGraph";
 
+import { UserComponent } from "../../components/UserComponent";
+
 export async function getStaticPaths() {
   const ebieki: WithDistance[] = JSON.parse(
     readFileSync("data/table.json", "utf8")
@@ -26,7 +28,9 @@ const kanjiBreakdownsAvailable = kanji
 
 <meta charset="utf-8" />
 
-<h1>{card.kanji}</h1>
+<UserComponent client:only="solid" />
+
+<h1>§{card.level}.{card.lesson_position} {card.kanji}</h1>
 <h2>{card.kanas.join(" ")}</h2>
 <p>{glossStr}</p>
 <ul>
