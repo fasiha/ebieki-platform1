@@ -1,0 +1,78 @@
+---
+import { readFileSync } from "node:fs";
+import type { WithDistance } from "../../interfaces/ebi-eki";
+import Descendant from "../../components/Descendant.astro";
+import type { DependencyGraph } from "../../interfaces/kanjiDepGraph";
+
+import { User } from "../../components/User";
+import type { KanjiDic2 } from "../../interfaces/kanjidic";
+
+export async function getStaticPaths() {
+  const fullGraph: DependencyGraph = JSON.parse(
+    readFileSync("data/wanikani-kanji-graph.json", "utf8")
+  );
+  const characters = Object.entries(fullGraph.kanjiToRadicals).flatMap(
+    ([kanji, radicals]) => [kanji].concat(radicals)
+  );
+
+  return characters.map((character) => ({ params: { character } }));
+}
+
+const { character } = Astro.params;
+const ee: WithDistance[] = JSON.parse(readFileSync("data/table.json", "utf8"));
+const vocabs = ee.filter((x) => x.card.kanji.includes(character));
+
+const fullGraph: DependencyGraph = JSON.parse(
+  readFileSync("data/wanikani-kanji-graph.json", "utf8")
+);
+const { kanjiToRadicals, radicalToKanjis } = fullGraph;
+
+const kanjidic: KanjiDic2 = JSON.parse(
+  readFileSync("data/kanjidic.json", "utf8")
+);
+
+const kanjidicChar = kanjidic.kanjidic2[character];
+---
+
+<meta charset="utf-8" />
+
+<User client:load />
+
+<h1>{character}</h1>
+<h2>{kanjidicChar?.readings.join("・")}</h2>
+<p>{kanjidicChar?.meanings.join(", ")}</p>
+
+<p>Vocab</p>
+<ul>
+  {
+    vocabs.map((v) => (
+      <li>
+        <a href={`/vocab/${v.card.kanji}`}>
+          <ruby>
+            {v.card.kanji}
+            <rt>{v.card.kanas[0]}</rt>
+          </ruby>
+        </a>{" "}
+        {v.glossStr}
+      </li>
+    ))
+  }
+</ul>
+
+<p>Children</p>
+<ul>
+  {
+    kanjiToRadicals[character]?.map((child) =>
+      child === character ? null : <li>{child}</li>
+    ) ?? "none"
+  }
+</ul>
+
+<p>Parents</p>
+<ul>
+  {
+    radicalToKanjis[character]?.map((parent) =>
+      parent === character ? null : <li>{parent}</li>
+    ) ?? "none"
+  }
+</ul>

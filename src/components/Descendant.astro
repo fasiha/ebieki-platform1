@@ -2,23 +2,31 @@
 import { readFileSync } from "node:fs";
 import type { WithDistance } from "../interfaces/ebi-eki";
 import type { KanjiDic2 } from "../interfaces/kanjidic";
+import { findDescendants } from "../utils/findDescendants";
 
 interface Props {
   kanji: string;
-  graph: Record<string, string[]>;
+  kanjiToRadicals: Record<string, string[]>;
+  radicalToKanjis: Record<string, string[]>;
+  ee: WithDistance[];
+  kanjiToEbieki: Record<string, WithDistance | undefined>;
+  kanjidic: KanjiDic2;
 }
-const { kanji, graph } = Astro.props;
-const descendants = (graph[kanji] ?? []).filter((x) => x !== kanji);
-const ee: WithDistance[] = JSON.parse(readFileSync("data/table.json", "utf8"));
-const { card, glossStr } = ee.find((x) => x.card.kanji === kanji) ?? {};
+const { kanji, kanjiToRadicals, radicalToKanjis, ee, kanjiToEbieki, kanjidic } =
+  Astro.props;
+
+const descendants = (kanjiToRadicals[kanji] ?? []).filter((x) => x !== kanji);
+
+const { card, glossStr } = kanjiToEbieki[kanji] ?? {};
 const relatives = ee.filter(
   (x) => x.card.kanji !== kanji && x.card.kanji.includes(kanji)
 );
 
-const kanjidic: KanjiDic2 = JSON.parse(
-  readFileSync("data/kanjidic.json", "utf8")
-);
 const character = kanjidic.kanjidic2[kanji];
+
+const ancestors = findDescendants(radicalToKanjis, kanji).map(
+  (char) => kanjiToEbieki[char] ?? char
+);
 ---
 
 <li>
@@ -31,14 +39,14 @@ const character = kanjidic.kanjidic2[kanji];
         </ruby>
       </a>
     ) : (
-      kanji
+      <a href={`/character/${kanji}`}>{kanji}</a>
     )
   }{" "}
   {glossStr}{" "}
   {character?.readings.join("・")}{" "}
   {character?.meanings.join(" / ")}{" "}
   {
-    relatives?.map((x) => (
+    relatives.map((x, idx, arr) => (
       <>
         <a href={`/vocab/${x.card.kanji}`}>
           <ruby>
@@ -46,9 +54,45 @@ const character = kanjidic.kanjidic2[kanji];
             <rt>{x.card.kanas[0]}</rt>
           </ruby>
         </a>
-        {" ・ "}
+        {idx < arr.length - 1 ? " ・ " : ""}
       </>
     ))
   }
-  <ul>{descendants.map((d) => <Astro.self graph={graph} kanji={d} />)}</ul>
+  {
+    ancestors.length > 0 && (
+      <>
+        (
+        {ancestors.map((other, idx, arr) => (
+          <>
+            {typeof other === "string" ? (
+              <a href={`/character/${other}`}>{other}</a>
+            ) : (
+              <a href={`/vocab/${other.card.kanji}`}>
+                <ruby>
+                  {other.card.kanji}
+                  <rt>{other.card.kanas[0]}</rt>
+                </ruby>
+              </a>
+            )}
+            {idx < arr.length - 1 ? ", " : ""}
+          </>
+        ))}
+        )
+      </>
+    )
+  }
+  <ul>
+    {
+      descendants.map((d) => (
+        <Astro.self
+          kanjidic={kanjidic}
+          ee={ee}
+          kanjiToEbieki={kanjiToEbieki}
+          radicalToKanjis={radicalToKanjis}
+          kanjiToRadicals={kanjiToRadicals}
+          kanji={d}
+        />
+      ))
+    }
+  </ul>
 </li>

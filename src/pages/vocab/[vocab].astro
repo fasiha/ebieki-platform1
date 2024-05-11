@@ -4,7 +4,8 @@ import type { WithDistance } from "../../interfaces/ebi-eki";
 import Descendant from "../../components/Descendant.astro";
 import type { DependencyGraph } from "../../interfaces/kanjiDepGraph";
 
-import { UserComponent } from "../../components/UserComponent";
+import { User } from "../../components/User";
+import type { KanjiDic2 } from "../../interfaces/kanjidic";
 
 export async function getStaticPaths() {
   const ebieki: WithDistance[] = JSON.parse(
@@ -20,15 +21,20 @@ const { card, glossStr } = ee.find((x) => x.card.kanji === kanji)!;
 const fullGraph: DependencyGraph = JSON.parse(
   readFileSync("data/wanikani-kanji-graph.json", "utf8")
 );
-const { kanjiToRadicals } = fullGraph;
+const { kanjiToRadicals, radicalToKanjis } = fullGraph;
 const kanjiBreakdownsAvailable = kanji
   .split("")
   .filter((x) => x in kanjiToRadicals);
+const kanjiToEbieki: Record<string, WithDistance | undefined> =
+  Object.fromEntries(ee.map((x) => [x.card.kanji, x]));
+const kanjidic: KanjiDic2 = JSON.parse(
+  readFileSync("data/kanjidic.json", "utf8")
+);
 ---
 
 <meta charset="utf-8" />
 
-<UserComponent client:only="solid" />
+<User client:load />
 
 <h1>§{card.level}.{card.lesson_position} {card.kanji}</h1>
 <h2>{card.kanas.join(" ")}</h2>
@@ -36,7 +42,14 @@ const kanjiBreakdownsAvailable = kanji
 <ul>
   {
     kanjiBreakdownsAvailable.map((k) => (
-      <Descendant graph={kanjiToRadicals} kanji={k} />
+      <Descendant
+        kanjidic={kanjidic}
+        ee={ee}
+        kanjiToEbieki={kanjiToEbieki}
+        radicalToKanjis={radicalToKanjis}
+        kanjiToRadicals={kanjiToRadicals}
+        kanji={k}
+      />
     ))
   }
 </ul>
