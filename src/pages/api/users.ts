@@ -18,9 +18,10 @@ const jsonOptions: ResponseInit = {
 
 export const PUT: APIRoute = async ({ request }) => {
   const { name } = (await request.json()) || {};
-  if (typeof name === "string") {
-    await db.insertInto("user").values({ name }).executeTakeFirst();
-    return new Response("ok");
+  if (!(typeof name === "string" && name)) {
+    return new Response("?", { status: 400 });
   }
-  return new Response("?", { status: 400 });
+  // TODO handle uniqueness constraint exceptions
+  await db.insertInto("user").values({ name }).executeTakeFirst();
+  return new Response("ok");
 };

@@ -1,6 +1,6 @@
-import { createSignal, For, Show, type Component, type Setter } from "solid-js";
+import { createSignal, For, onMount, Show, type Component } from "solid-js";
+import { setUser, user } from "./signals";
 
-const [user, setUser] = createSignal("");
 const [users, setUsers] = createSignal<string[]>([]);
 const [networkError, setNetworkError] = createSignal("");
 
@@ -57,10 +57,15 @@ const Login: Component = () => {
     }
   };
 
+  const handleLogin = () => {
+    setUser(selected());
+    localStorage.setItem("user", selected());
+  };
+
   return (
     <div>
       <label>
-        Who are you?&nbsp;
+        Who are you?{" "}
         <input
           type="text"
           list="usersList"
@@ -72,9 +77,7 @@ const Login: Component = () => {
         </datalist>
       </label>
       <Show when={users().includes(selected())}>
-        <button onClick={() => setUser(selected())}>
-          Log in as {selected()}
-        </button>
+        <button onClick={handleLogin}>Log in as {selected()}</button>
       </Show>
       <label>
         {" "}
@@ -93,6 +96,14 @@ const Login: Component = () => {
 };
 
 export const User: Component = () => {
+  onMount(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) setUser(savedUser);
+  });
+  const handleLogout = () => {
+    setUser("");
+    localStorage.removeItem("user");
+  };
   return (
     <div>
       <Show when={networkError()}>
@@ -100,7 +111,7 @@ export const User: Component = () => {
       </Show>
       <Show when={user()} fallback={<Login />}>
         <div>
-          Welcome {user()}! <button onClick={() => setUser("")}>Logout</button>
+          Welcome {user()}! <button onClick={handleLogout}>Logout</button>
         </div>
       </Show>
     </div>

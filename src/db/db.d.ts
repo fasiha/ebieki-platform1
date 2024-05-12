@@ -9,20 +9,26 @@ export interface _EbiekiDbState {
 }
 
 export interface Ebisu {
+  buried: number;
   createdMillis: number;
-  data: string;
+  deviceId: string;
   direction: string;
   id: Generated<number>;
-  kanji: string;
+  model: string;
+  modelTimeMillis: number;
+  quizMeta: string;
   user: string;
+  vocabKanji: string;
 }
 
 export interface File {
   accessedMillis: number;
   createdMillis: number;
   data: Buffer;
+  forwardedUuid: string;
   id: Generated<number>;
   mime: string;
+  numBytes: number;
   sha256: string;
   timesAccessed: number;
   uuid: string;
@@ -30,10 +36,11 @@ export interface File {
 
 export interface Note {
   createdMillis: number;
+  deviceId: string;
   id: Generated<number>;
-  kanji: string;
   note: string;
   user: string;
+  vocabKanji: string;
 }
 
 export interface User {
@@ -42,11 +49,13 @@ export interface User {
 }
 
 export interface Vocab {
+  createdMillis: number;
   customDefinition: string;
+  deviceId: string;
   id: Generated<number>;
   jmdictCustomize: string;
-  kanji: string;
   user: string;
+  vocabKanji: string;
 }
 
 export interface DB {

@@ -6,6 +6,7 @@ import type { DependencyGraph } from "../../interfaces/kanjiDepGraph";
 
 import { User } from "../../components/User";
 import type { KanjiDic2 } from "../../interfaces/kanjidic";
+import { Memory } from "../../components/Memory";
 
 export async function getStaticPaths() {
   const ebieki: WithDistance[] = JSON.parse(
@@ -35,6 +36,7 @@ const kanjidic: KanjiDic2 = JSON.parse(
 <meta charset="utf-8" />
 
 <User client:load />
+<Memory vocabKanji={kanji} client:load />
 
 <h1>§{card.level}.{card.lesson_position} {card.kanji}</h1>
 <h2>{card.kanas.join(" ")}</h2>
