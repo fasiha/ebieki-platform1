@@ -27,10 +27,6 @@ type Learned = Record<string, undefined | Record<string, boolean>>;
 const [learned, setLearned] = createSignal<Learned>({});
 const [networkError, setNetworkError] = createSignal("");
 
-createEffect(() => {
-  if (user()) fetchLearned();
-});
-
 async function fetchLearned() {
   if (!user()) return;
 
@@ -62,7 +58,11 @@ const fetchHelper = async (responsePromise: Promise<Response>) => {
   setNetworkError("");
 };
 
-export const Memory: Component<Props> = ({ vocabKanji }) => {
+export const MemoryBar: Component<Props> = ({ vocabKanji }) => {
+  createEffect(() => {
+    if (user()) fetchLearned();
+  });
+
   const handleLearn = (direction: Direction) => {
     fetchHelper(
       learnHelper({
