@@ -1,8 +1,8 @@
 ---
-import { readFileSync } from "node:fs";
 import type { WithDistance } from "../interfaces/ebi-eki";
 import type { KanjiDic2 } from "../interfaces/kanjidic";
 import { findDescendants } from "../utils/findDescendants";
+import { MemoryThumbnail } from "./MemoryThumbnail";
 
 interface Props {
   kanji: string;
@@ -32,12 +32,9 @@ const ancestors = findDescendants(radicalToKanjis, kanji).map(
 <li>
   {
     card ? (
-      <a href={`/vocab/${card.kanji}`}>
-        <ruby>
-          {kanji}
-          <rt>{card.kanas[0]}</rt>
-        </ruby>
-      </a>
+      <>
+        <MemoryThumbnail kanji={card.kanji} kana={card.kanas[0]} client:load />
+      </>
     ) : (
       <a href={`/character/${kanji}`}>{kanji}</a>
     )
@@ -48,12 +45,11 @@ const ancestors = findDescendants(radicalToKanjis, kanji).map(
   {
     relatives.map((x, idx, arr) => (
       <>
-        <a href={`/vocab/${x.card.kanji}`}>
-          <ruby>
-            {x.card.kanji}
-            <rt>{x.card.kanas[0]}</rt>
-          </ruby>
-        </a>
+        <MemoryThumbnail
+          kanji={x.card.kanji}
+          kana={x.card.kanas[0]}
+          client:load
+        />
         {idx < arr.length - 1 ? " ・ " : ""}
       </>
     ))
@@ -67,12 +63,11 @@ const ancestors = findDescendants(radicalToKanjis, kanji).map(
             {typeof other === "string" ? (
               <a href={`/character/${other}`}>{other}</a>
             ) : (
-              <a href={`/vocab/${other.card.kanji}`}>
-                <ruby>
-                  {other.card.kanji}
-                  <rt>{other.card.kanas[0]}</rt>
-                </ruby>
-              </a>
+              <MemoryThumbnail
+                kanji={other.card.kanji}
+                kana={other.card.kanas[0]}
+                client:load
+              />
             )}
             {idx < arr.length - 1 ? ", " : ""}
           </>

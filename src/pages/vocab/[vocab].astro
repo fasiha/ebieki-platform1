@@ -1,4 +1,6 @@
 ---
+import "../../styles/global.css";
+
 import { readFileSync } from "node:fs";
 import type { WithDistance } from "../../interfaces/ebi-eki";
 import Descendant from "../../components/Descendant.astro";
@@ -36,12 +38,13 @@ const kanjidic: KanjiDic2 = JSON.parse(
 <meta charset="utf-8" />
 <title>{kanji}</title>
 
-<User client:load />
-<MemoryBar vocabKanji={kanji} client:load />
+<User client:idle />
+<MemoryBar vocabKanji={kanji} client:idle />
 
 <h1>§{card.level}.{card.lesson_position} {card.kanji}</h1>
 <h2>{card.kanas.join(" ")}</h2>
 <p>{glossStr}</p>
+
 <ul>
   {
     kanjiBreakdownsAvailable.map((k) => (

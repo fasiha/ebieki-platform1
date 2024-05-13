@@ -5,7 +5,6 @@ import { db } from "../../db";
 
 export const GET: APIRoute = async () => {
   const query = db.selectFrom("user").select("name").distinct();
-  console.log("sql", query.compile().sql);
   const users = await query.execute();
   return new Response(JSON.stringify(users.map((o) => o.name)), jsonOptions);
 };

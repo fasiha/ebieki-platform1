@@ -1,10 +1,7 @@
 import { createSignal, For, onMount, Show, type Component } from "solid-js";
-import { setUser, user } from "./signals";
+import { networkError, setNetworkError, setUser, user } from "./signals";
 
 const [users, setUsers] = createSignal<string[]>([]);
-const [networkError, setNetworkError] = createSignal("");
-
-fetchUsers(); // fire and forget
 
 async function fetchUsers() {
   const res = await fetch("/api/users");
@@ -98,7 +95,8 @@ const Login: Component = () => {
 export const User: Component = () => {
   onMount(() => {
     const savedUser = localStorage.getItem("user");
-    if (savedUser) setUser(savedUser);
+    if (savedUser && savedUser !== user()) setUser(savedUser);
+    fetchUsers();
   });
   const handleLogout = () => {
     setUser("");

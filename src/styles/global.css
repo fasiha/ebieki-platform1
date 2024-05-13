@@ -1,0 +1,35 @@
+h1 {
+  color: auto; /* Just so Astro doesn't drop this */
+}
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.cards .card {
+  padding: 0.5rem 0.3rem 0rem 0.3rem;
+  margin: 0.1rem;
+  border: 1px solid orange;
+  white-space: nowrap;
+}
+.cards .card.card-learned {
+  border: 1px solid green;
+}
+
+a.card {
+  text-decoration: none;
+  color: darkorange;
+}
+a.card.card-learned {
+  text-decoration: none;
+  color: darkgreen;
+}
+
+a.card :hover {
+  color: orange;
+}
+
+a.card.card-learned :hover {
+  color: green;
+}

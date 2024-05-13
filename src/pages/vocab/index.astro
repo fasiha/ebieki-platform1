@@ -1,54 +1,24 @@
 ---
+import "../../styles/global.css";
+
 import { readFileSync } from "node:fs";
 import type { WithDistance } from "../../interfaces/ebi-eki";
+import { Thumbnails } from "../../components/Thumbnails";
+import { User } from "../../components/User";
 
 const ebieki: WithDistance[] = JSON.parse(
   readFileSync("data/table.json", "utf8")
 );
-const kanji = ebieki.map((x) => x.card.kanji);
-const mainKana = ebieki.map((x) => x.card.kanas[0]);
+const kanjis = ebieki.map((x) => x.card.kanji);
+const kanas = ebieki.map((x) => x.card.kanas[0]);
 ---
 
 <meta charset="utf-8" />
 <title>Vocabulary</title>
-<style>
-  .cards {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-  }
+<style is:global></style>
 
-  .card {
-    padding: 0.5rem 0.3rem 0rem 0.3rem;
-    margin: 0.1rem;
-    border: 1px solid orange;
-    white-space: nowrap;
-  }
+<h1>Welcome to Ebieki</h1>
 
-  .card a {
-    text-decoration: none;
-    color: unset;
-  }
+<User client:idle />
 
-  .card a:hover {
-    text-decoration: underline;
-    color: darkorange;
-  }
-</style>
-
-<div class="cards">
-  {
-    kanji.map((k, i) => (
-      <>
-        <div class="card">
-          <a href={`/vocab/${k}`}>
-            <ruby>
-              {k}
-              <rt>{mainKana[i]}</rt>
-            </ruby>
-          </a>
-        </div>{" "}
-      </>
-    ))
-  }
-</div>
+<Thumbnails kanas={kanas} kanjis={kanjis} client:idle />
