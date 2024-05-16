@@ -2,7 +2,7 @@ export const prerender = false; // this needs to be live
 
 import type { APIRoute } from "astro";
 import { db } from "../../db";
-import type { LearnedResponse } from "./learnedHelper";
+import type { LearnedResponse } from "../../apiHelpers/learnedHelper";
 
 const jsonOptions: ResponseInit = {
   headers: {

@@ -1,4 +1,4 @@
-import type { Direction } from "../../interfaces/flashcardDirection";
+import type { Direction } from "../interfaces/flashcardDirection";
 
 export interface Args {
   user: string;

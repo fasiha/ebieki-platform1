@@ -6,14 +6,14 @@ import {
   setNetworkError,
   user,
 } from "./signals";
-import { learnHelper } from "../pages/api/learnHelper";
+import { learnHelper } from "../apiHelpers/learnHelper";
 import { initModel } from "../ebisu/split3";
 import {
   ALLOWED_DIRECTIONS,
   isDirection,
   type Direction,
 } from "../interfaces/flashcardDirection";
-import { unlearnHelper } from "../pages/api/unlearnHelper";
+import { unlearnHelper } from "../apiHelpers/unlearnHelper";
 
 interface Props {
   vocabKanji: string;

@@ -2,7 +2,7 @@ export const prerender = false; // this needs to be live
 
 import type { APIRoute } from "astro";
 import { db } from "../../db";
-import type { Args } from "./unlearnHelper";
+import type { Args } from "../../apiHelpers/unlearnHelper";
 
 export const PUT: APIRoute = async ({ request }) => {
   const { user, vocabKanji, direction } = (await request.json()) as Args;

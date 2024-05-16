@@ -2,7 +2,7 @@ import { createEffect, createSignal, type Setter } from "solid-js";
 import {
   learnedHelper,
   type LearnedResponse,
-} from "../pages/api/learnedHelper";
+} from "../apiHelpers/learnedHelper";
 import { ALLOWED_DIRECTIONS } from "../interfaces/flashcardDirection";
 
 export const [user, setUser] = createSignal("");
