@@ -33,3 +33,7 @@ a.card :hover {
 a.card.card-learned :hover {
   color: green;
 }
+
+code {
+  white-space: pre-wrap;
+}

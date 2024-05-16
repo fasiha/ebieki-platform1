@@ -35,7 +35,7 @@ create table
     note text not null,
     createdMillis integer not null,
     deviceId text not null,
-    unique (user, createdMillis, vocabKanji, deviceId)
+    unique (user, vocabKanji, createdMillis, deviceId)
   );
 
 -- each vocab can have multiple memory models for different quiz directions

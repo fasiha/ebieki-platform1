@@ -3,7 +3,6 @@ import "../../styles/global.css";
 
 import { readFileSync } from "node:fs";
 import type { WithDistance } from "../../interfaces/ebi-eki";
-import Descendant from "../../components/Descendant.astro";
 import type { DependencyGraph } from "../../interfaces/kanjiDepGraph";
 
 import { User } from "../../components/User";
@@ -38,6 +37,7 @@ const kanjidicChar = kanjidic.kanjidic2[character];
 ---
 
 <meta charset="utf-8" />
+<title>{character} (Character)</title>
 
 <User client:load />
 
