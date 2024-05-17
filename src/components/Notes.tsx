@@ -5,6 +5,7 @@ import {
   noteHelperPut,
   type GetResponse,
 } from "../apiHelpers/noteHelper";
+import { MarkdownImages } from "./MarkdownImages";
 
 interface Props {
   vocabKanji: string;
@@ -138,6 +139,7 @@ export const Notes: Component<Props> = ({ vocabKanji }) => {
             <code>{markdown()}</code>
           </p>
           <button onClick={() => setEditing(true)}>Edit</button>
+          <MarkdownImages markdown={markdown()} />
         </>
       </Show>
     </Show>
