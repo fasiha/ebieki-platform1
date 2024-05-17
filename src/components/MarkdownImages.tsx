@@ -19,8 +19,8 @@ export const MarkdownImages: Component<Props> = ({ markdown }) => {
   );
 };
 
-const markdownToImageUrls = (markdown: string): string[] => {
-  const x = markdown
+const markdownToImageUrls = (markdown: string): string[] =>
+  markdown
     .split("\n")
     .filter(
       (s) =>
@@ -29,5 +29,3 @@ const markdownToImageUrls = (markdown: string): string[] => {
         s.match(/[a-zA-Z0-9-]+\)$/)
     )
     .map((s) => s.slice(s.indexOf("/api/file")).replace(")", ""));
-  return [1, 2, 3].flatMap((_) => x);
-};
