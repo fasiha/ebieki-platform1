@@ -73,6 +73,9 @@ create unique index learnedGroup on ebisu (
   deviceId
 );
 
+-- makes finding a list of all directions fast
+create index ebisuDirections on ebisu (direction);
+
 -- blob storage! To embed in `note`s
 create table
   file (

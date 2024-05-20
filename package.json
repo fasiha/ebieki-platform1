@@ -17,6 +17,7 @@
     "astro": "^4.8.2",
     "better-sqlite3": "^9.6.0",
     "dotenv": "^16.4.5",
+    "ebieki": "github:fasiha/ebieki",
     "ebisu-js": "^2.1.2",
     "kysely": "^0.27.3",
     "minimize-golden-section-1d": "^3.0.0",
