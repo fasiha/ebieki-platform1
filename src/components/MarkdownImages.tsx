@@ -1,21 +1,23 @@
 import styles from "./MarkdownImages.module.css";
 
-import { For, type Component } from "solid-js";
+import { For, Show, type Component } from "solid-js";
 
 interface Props {
   markdown?: string;
 }
 export const MarkdownImages: Component<Props> = ({ markdown }) => {
   return (
-    <div class={styles["container"]}>
-      <For each={markdownToImageUrls(markdown ?? "")}>
-        {(url) => (
-          <a href={url} class={styles["item"]}>
-            <img src={url} />
-          </a>
-        )}
-      </For>
-    </div>
+    <Show when={markdownToImageUrls(markdown ?? "").length}>
+      <div class={styles["container"]}>
+        <For each={markdownToImageUrls(markdown ?? "")}>
+          {(url) => (
+            <a href={url} class={styles["item"]}>
+              <img src={url} />
+            </a>
+          )}
+        </For>
+      </div>
+    </Show>
   );
 };
 

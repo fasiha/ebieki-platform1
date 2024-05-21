@@ -20,7 +20,11 @@ export async function getStaticPaths() {
 
 const { vocab: kanji } = Astro.params;
 const ee: WithDistance[] = JSON.parse(readFileSync("data/table.json", "utf8"));
-const { card, glossStr } = ee.find((x) => x.card.kanji === kanji)!;
+const { card, glossStr, glossObj } = ee.find((x) => x.card.kanji === kanji)!;
+const defs =
+  "id" in glossObj
+    ? glossObj.sense.map((sense) => sense.gloss.map((g) => g.text).join("; "))
+    : [glossStr];
 
 const fullGraph: DependencyGraph = JSON.parse(
   readFileSync("data/wanikani-kanji-graph.json", "utf8")
@@ -44,7 +48,9 @@ const kanjidic: KanjiDic2 = JSON.parse(
 
 <h1>§{card.level}.{card.lesson_position} {card.kanji}</h1>
 <h2>{card.kanas.join(" ")}</h2>
-<p>{glossStr}</p>
+<ol>
+  {defs.map((def) => <li>{def}</li>)}
+</ol>
 
 <Notes vocabKanji={kanji} client:only />
 
