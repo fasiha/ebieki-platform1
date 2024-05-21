@@ -76,7 +76,7 @@ const ancestors = findDescendants(radicalToKanjis, kanji).map(
       </>
     )
   }
-  <ul>
+  <ol>
     {
       descendants.map((d) => (
         <Astro.self
@@ -89,5 +89,5 @@ const ancestors = findDescendants(radicalToKanjis, kanji).map(
         />
       ))
     }
-  </ul>
+  </ol>
 </li>

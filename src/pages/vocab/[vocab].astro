@@ -54,7 +54,7 @@ const kanjidic: KanjiDic2 = JSON.parse(
 
 <Notes vocabKanji={kanji} client:only />
 
-<ul>
+<ol>
   {
     kanjiBreakdownsAvailable.map((k) => (
       <Descendant
@@ -67,4 +67,4 @@ const kanjidic: KanjiDic2 = JSON.parse(
       />
     ))
   }
-</ul>
+</ol>
