@@ -1,14 +1,10 @@
 ---
 import "../../styles/global.css";
 
-import { readFileSync } from "node:fs";
-import type { WithDistance } from "../../interfaces/ebi-eki";
+import { vocab as ebieki } from "ebieki";
 import { Thumbnails } from "../../components/Thumbnails";
 import { User } from "../../components/User";
 
-const ebieki: WithDistance[] = JSON.parse(
-  readFileSync("data/table.json", "utf8")
-);
 const kanjis = ebieki.map((x) => x.card.kanji);
 const kanas = ebieki.map((x) => x.card.kanas[0]);
 ---

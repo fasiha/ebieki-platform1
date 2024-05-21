@@ -2,9 +2,9 @@
 import "../../styles/global.css";
 
 import { readFileSync } from "node:fs";
-import type { WithDistance } from "../../interfaces/ebi-eki";
+import { vocab as ee, dependencies, type WithDistance } from "ebieki";
+
 import Descendant from "../../components/Descendant.astro";
-import type { DependencyGraph } from "../../interfaces/kanjiDepGraph";
 
 import { User } from "../../components/User";
 import type { KanjiDic2 } from "../../interfaces/kanjidic";
@@ -12,24 +12,17 @@ import { MemoryBar } from "../../components/MemoryBar";
 import { Notes } from "../../components/Notes";
 
 export async function getStaticPaths() {
-  const ebieki: WithDistance[] = JSON.parse(
-    readFileSync("data/table.json", "utf8")
-  );
-  return ebieki.map((x) => ({ params: { vocab: x.card.kanji } }));
+  return ee.map((x) => ({ params: { vocab: x.card.kanji } }));
 }
 
 const { vocab: kanji } = Astro.params;
-const ee: WithDistance[] = JSON.parse(readFileSync("data/table.json", "utf8"));
 const { card, glossStr, glossObj } = ee.find((x) => x.card.kanji === kanji)!;
 const defs =
   "id" in glossObj
     ? glossObj.sense.map((sense) => sense.gloss.map((g) => g.text).join("; "))
     : [glossStr];
 
-const fullGraph: DependencyGraph = JSON.parse(
-  readFileSync("data/wanikani-kanji-graph.json", "utf8")
-);
-const { kanjiToRadicals, radicalToKanjis } = fullGraph;
+const { kanjiToRadicals, radicalToKanjis } = dependencies;
 const kanjiBreakdownsAvailable = kanji
   .split("")
   .filter((x) => x in kanjiToRadicals);
