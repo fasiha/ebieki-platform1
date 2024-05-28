@@ -17,13 +17,13 @@
     "astro": "^4.8.2",
     "better-sqlite3": "^9.6.0",
     "dotenv": "^16.4.5",
-    "ebieki": "github:fasiha/ebieki",
     "ebisu-js": "^2.1.2",
     "kysely": "^0.27.3",
     "minimize-golden-section-1d": "^3.0.0",
     "sharp": "^0.33.3",
     "solid-devtools": "^0.30.1",
     "solid-js": "^1.8.17",
+    "tmp-promise": "^3.0.3",
     "typescript": "^5.4.5"
   },
   "devDependencies": {

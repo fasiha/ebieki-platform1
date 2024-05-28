@@ -3,10 +3,12 @@ export const prerender = false; // this needs to be live
 import type { APIRoute } from "astro";
 import { db } from "../../db";
 import { predictRecall, type Split3Model } from "../../ebisu/split3";
-import { vocab as ebieki, type WithDistance } from "ebieki";
+import { type WithDistance } from "../../ebieki";
 import type { KanaReview, KanjiReview } from "../../apiHelpers/reivewHelper";
 import { weightedSample } from "../../utils/randomSample";
+import { getVocab } from "../../dictionary/getVocab";
 
+const ebieki = await getVocab();
 const kanjiToEbieki: Record<string, WithDistance> = Object.fromEntries(
   ebieki.map((e) => [e.card.kanji, e])
 );

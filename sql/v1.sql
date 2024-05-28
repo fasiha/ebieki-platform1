@@ -92,3 +92,17 @@ create table
     accessedMillis integer not null,
     timesAccessed integer not null
   );
+
+-- this is for vocab NOT in Wanikani that we want to learn
+create table
+  jmdictVocab (
+    id INTEGER PRIMARY KEY AUTOINCREMENT not null,
+    createdMillis integer not null,
+    vocabKanji text unique not null, -- this is pretty much the "index" for wanikani/jmdict
+    json text not null, --  this contains a full wanikani+jmdict object (including "closest")
+    level integer not null, -- per wanikani or jmdict
+    lessonPosition integer not null, -- ditto
+    inWanikani boolean not null -- if this is in the original wanikani database or custom
+  );
+
+create index vocabSort on jmdictVocab (level, lessonPosition);

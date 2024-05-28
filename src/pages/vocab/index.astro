@@ -1,9 +1,11 @@
 ---
 import "../../styles/global.css";
 
-import { vocab as ebieki } from "ebieki";
 import { Thumbnails } from "../../components/Thumbnails";
 import { User } from "../../components/User";
+import { getVocab } from "../../dictionary/getVocab";
+
+const ebieki = await getVocab();
 
 const kanjis = ebieki.map((x) => x.card.kanji);
 const kanas = ebieki.map((x) => x.card.kanas[0]);

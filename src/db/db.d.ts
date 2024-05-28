@@ -34,6 +34,16 @@ export interface File {
   uuid: string;
 }
 
+export interface JmdictVocab {
+  createdMillis: number;
+  id: Generated<number>;
+  inWanikani: number;
+  json: string;
+  lessonPosition: number;
+  level: number;
+  vocabKanji: string;
+}
+
 export interface Note {
   createdMillis: number;
   deviceId: string;
@@ -62,6 +72,7 @@ export interface DB {
   _ebieki_db_state: _EbiekiDbState;
   ebisu: Ebisu;
   file: File;
+  jmdictVocab: JmdictVocab;
   note: Note;
   user: User;
   vocab: Vocab;

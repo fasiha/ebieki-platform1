@@ -1,4 +1,4 @@
-import type { WithDistance } from "ebieki";
+import type { WithDistance } from "../ebieki";
 
 export interface KanaReview {
   direction: "kana";

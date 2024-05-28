@@ -1,6 +1,5 @@
 export const prerender = false; // needs to be live
 
-import { writeFileSync } from "node:fs";
 import { createHash, randomUUID } from "node:crypto";
 import sharp from "sharp";
 

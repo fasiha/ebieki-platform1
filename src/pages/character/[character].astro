@@ -2,11 +2,12 @@
 import "../../styles/global.css";
 
 import { readFileSync } from "node:fs";
-import { vocab as ee, dependencies } from "ebieki";
+import { dependencies } from "../../ebieki";
 
 import { User } from "../../components/User";
 import type { KanjiDic2 } from "../../interfaces/kanjidic";
 import { MemoryThumbnail } from "../../components/MemoryThumbnail";
+import { getVocab } from "../../dictionary/getVocab";
 
 export async function getStaticPaths() {
   const characters = Object.entries(dependencies.kanjiToRadicals).flatMap(
@@ -15,6 +16,8 @@ export async function getStaticPaths() {
 
   return characters.map((character) => ({ params: { character } }));
 }
+
+const ee = await getVocab();
 
 const { character } = Astro.params;
 const vocabs = ee.filter((x) => x.card.kanji.includes(character));
