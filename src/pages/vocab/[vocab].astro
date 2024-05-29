@@ -1,4 +1,7 @@
 ---
+// this should really be prerendered but when I'm adding vocab, that's annowing
+export const prerender = false; // this needs to be live
+
 import "../../styles/global.css";
 
 import { readFileSync } from "node:fs";
@@ -13,13 +16,13 @@ import { Notes } from "../../components/Notes";
 import { getVocab } from "../../dictionary/getVocab";
 
 const ee = await getVocab();
+// we're prerendering this for now
+// export async function getStaticPaths() {
+//   const ee = await getVocab();
+//   return ee.map((x) => ({ params: { vocab: x.card.kanji } }));
+// }
 
-export async function getStaticPaths() {
-  const ee = await getVocab();
-  return ee.map((x) => ({ params: { vocab: x.card.kanji } }));
-}
-
-const { vocab: kanji } = Astro.params;
+const { vocab: kanji = "unknown" } = Astro.params;
 const { card, glossStr, glossObj } = ee.find((x) => x.card.kanji === kanji)!;
 const defs =
   "id" in glossObj

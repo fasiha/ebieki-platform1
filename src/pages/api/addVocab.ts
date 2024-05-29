@@ -30,13 +30,14 @@ const setup = () => {
 
 export const PUT: APIRoute = async ({ request }) => {
   const dict = await setup();
-  const { kanji, kanas } = (await request.json()) as Args;
+  const { kanji, kanas = [] } = (await request.json()) as Args;
+
+  // empty array of kanas will pass since `[].every(f)` is true (thanks monoids!)
   if (
     !(
       typeof kanji === "string" &&
       Array.isArray(kanas) &&
-      kanas.every((k) => typeof k === "string") &&
-      kanas.length > 0
+      kanas.every((k) => typeof k === "string")
     )
   )
     return new Response("invalid", { status: 400 });
@@ -44,22 +45,33 @@ export const PUT: APIRoute = async ({ request }) => {
   const results = dict.filter(
     (w) =>
       w.kanji.some((k) => k.text === kanji) &&
-      kanas.every((kana) => w.kana.some((k) => k.text === kana))
+      kanas.every((kana) => w.kana.some((k) => k.text === kana)) //empty kana is ok
   );
 
   if (results.length === 1) {
     try {
-      const updated = await submitJmdict(results[0], kanji, kanas);
+      const updated = await submitJmdict(
+        results[0],
+        kanji,
+        kanas.length > 0 ? kanas : [results[0].kana[0].text]
+      );
       return new Response(
         JSON.stringify({ word: results[0], updated }),
         jsonOptions
       );
-    } catch (e) {
+    } catch (e: any) {
       console.error("error", e);
-      return new Response(JSON.stringify({ error: e, word: results[0] }), {
-        ...jsonOptions,
-        status: 500,
-      });
+      return new Response(
+        JSON.stringify({
+          error: e,
+          message: e.message,
+          word: results[0],
+        }),
+        {
+          ...jsonOptions,
+          status: 500,
+        }
+      );
     }
   }
   return new Response(
