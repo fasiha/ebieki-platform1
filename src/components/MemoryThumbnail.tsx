@@ -26,7 +26,6 @@ const vocabLearned = (learned: Learned, vocabKanji: string): boolean => {
   const learnt = learned[vocabKanji];
   for (const key in learnt) {
     if (learnt[key]) {
-      console.log("LEARNED", vocabKanji, key, true);
       return true;
     }
   }

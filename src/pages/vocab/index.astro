@@ -18,4 +18,12 @@ const kanas = ebieki.map((x) => x.card.kanas[0]);
 
 <User client:idle />
 
-<Thumbnails kanas={kanas} kanjis={kanjis} client:idle />
+<details>
+  <summary>Learned!</summary>
+  <Thumbnails learnedOnly kanas={kanas} kanjis={kanjis} client:idle />
+</details>
+
+<details open>
+  <summary>All vocab!</summary>
+  <Thumbnails kanas={kanas} kanjis={kanjis} client:idle />
+</details>
