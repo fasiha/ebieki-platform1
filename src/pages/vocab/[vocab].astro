@@ -15,7 +15,10 @@ import { MemoryBar } from "../../components/MemoryBar";
 import { Notes } from "../../components/Notes";
 import { getVocab } from "../../dictionary/getVocab";
 
-const ee = await getVocab();
+const ebieki = await getVocab();
+const kanjiToEbieki: Record<string, WithDistance | undefined> =
+  Object.fromEntries(ebieki.map((x) => [x.card.kanji, x]));
+
 // we're prerendering this for now
 // export async function getStaticPaths() {
 //   const ee = await getVocab();
@@ -23,7 +26,9 @@ const ee = await getVocab();
 // }
 
 const { vocab: kanji = "unknown" } = Astro.params;
-const { card, glossStr, glossObj } = ee.find((x) => x.card.kanji === kanji)!;
+const ee = kanjiToEbieki[kanji];
+if (!ee) throw new Error("unknown ebieki?");
+const { card, glossStr, glossObj, closest } = ee;
 const defs =
   "id" in glossObj
     ? glossObj.sense.map((sense) => sense.gloss.map((g) => g.text).join("; "))
@@ -33,11 +38,14 @@ const { kanjiToRadicals, radicalToKanjis } = dependencies;
 const kanjiBreakdownsAvailable = kanji
   .split("")
   .filter((x) => x in kanjiToRadicals);
-const kanjiToEbieki: Record<string, WithDistance | undefined> =
-  Object.fromEntries(ee.map((x) => [x.card.kanji, x]));
 const kanjidic: KanjiDic2 = JSON.parse(
   readFileSync("data/kanjidic.json", "utf8")
 );
+
+const closestEbieki = closest.map((c) => ({
+  ...c,
+  ebieki: kanjiToEbieki[c.kanji],
+}));
 ---
 
 <meta charset="utf-8" />
@@ -59,7 +67,7 @@ const kanjidic: KanjiDic2 = JSON.parse(
     kanjiBreakdownsAvailable.map((k) => (
       <Descendant
         kanjidic={kanjidic}
-        ee={ee}
+        ee={ebieki}
         kanjiToEbieki={kanjiToEbieki}
         radicalToKanjis={radicalToKanjis}
         kanjiToRadicals={kanjiToRadicals}
@@ -68,3 +76,18 @@ const kanjidic: KanjiDic2 = JSON.parse(
     ))
   }
 </ol>
+
+<p>Closest</p>
+<ul>
+  {
+    closestEbieki.map((c) => (
+      <li>
+        <ruby>
+          {c.ebieki?.card.kanji}
+          <rt>{c.ebieki?.card.kanas[0]}</rt>
+        </ruby>{" "}
+        ({c.ebieki?.glossStr}) ({c.distance})
+      </li>
+    ))
+  }
+</ul>
