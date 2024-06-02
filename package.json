@@ -8,6 +8,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "init-db": "sqlite3 ebieki.db < sql/v1.sql",
     "wrap-db": "kysely-codegen --dialect sqlite --out-file src/db/db.d.ts"
   },
   "dependencies": {
