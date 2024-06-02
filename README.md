@@ -12,9 +12,13 @@ It's very rough and more of a proof of concept. To set it up, you need to
 6. Preprae to initialize the database wrapper: `cp .env.example .env`
    1. This just contains the name of the database, `ebieki.db`. So if you hate that name, rename the file and change `.env`.
 7. Generate the database wrapper: `npx pnpm wrap-db`
-8. Start the server: `npx pnpm start`
+8. Download a few dictionary files into `ebieki/data`:
+   1. a recent JmdictSimplified *English* (`-eng-` in the filename) dictionary from https://github.com/scriptin/jmdict-simplified/releases and put it (something like `jmdict-eng-3.5.0.json`) in `ebieki-platform1/data`
+   2. a recent JmdictFurigana from https://github.com/Doublevil/JmdictFurigana/releases and put it (something like `JmdictFurigana.json`) in `ebieki-platform1/data`
+   3. and a recent JmneditFurigana also from https://github.com/Doublevil/JmdictFurigana/releases (this is for people/place names, something like JmnedictFurigana.json) and put this in `ebieki-platform1/data` as well.
+9. Start the server: `npx pnpm start`
    1. Leave this command running, making note of the URL
-9. Open your browser to http://localhost:4321/vocab (though check the URL emitted by the above step)
+10. Open your browser to http://localhost:4321/vocab (though check the URL emitted by the above step)
 
 You'll see a (very ugly) page like this:
 
